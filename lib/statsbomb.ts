@@ -41,6 +41,10 @@ export async function getWorldCup2022FinalShots(): Promise<{
   ).then(r => r.json());
   const final = matches.find(m => m.competition_stage.name === "Final");
 
+  if (!final) {
+  throw new Error("Could not find World Cup 2022 Final in match data");
+}
+
   // 3. Pull events for that match, filter to second-half shots
   const events: ShotEvent[] = await fetch(`${BASE}/events/${final.match_id}.json`).then(r => r.json());
   const shots = events.filter(e => e.type.name === "Shot" && e.period === 2);
